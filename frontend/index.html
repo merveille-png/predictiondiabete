@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiaCheck — Dépistage intelligent du diabète</title>
+
+<!-- Polices -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+<!-- SweetAlert2 (popup animée pour le résultat du dépistage) -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+<!-- Tailwind CSS (préfixé "tw-" pour ne jamais entrer en conflit avec les classes Bootstrap) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    prefix: "tw-",
+    corePlugins: { preflight: false }, // laisse Bootstrap gérer le reset CSS global
+    theme: {
+      extend: {
+        colors: {
+          primaire: { DEFAULT: "#e11d48", clair: "#fb7185", sombre: "#9f1239" },
+        },
+      },
+    },
+  };
+</script>
+
+<!-- Styles custom du site -->
+<link href="assets/css/style.css?v=20260918d" rel="stylesheet">
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar navbar-expand-lg navbar-dia fixed-top py-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2 fs-4" href="#accueil">
+      <i class="bi bi-activity"></i> DiaCheck
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDia">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navDia">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="#accueil">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pourquoi">Pourquoi ce test</a></li>
+        <li class="nav-item"><a class="nav-link" href="#comment-ca-marche">Comment ça marche</a></li>
+        <li class="nav-item"><a class="nav-link" href="#conseils">Conseils santé</a></li>
+        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn btn-dia-primaire" href="#depistage">Faire le test</a>
+        </li>
+        <li class="nav-item ms-lg-1">
+          <button type="button" id="bouton-deconnexion" class="btn btn-link nav-link" title="Se déconnecter">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="accueil">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <span class="hero-badge"><i class="bi bi-shield-check"></i> Gratuit &amp; sans inscription</span>
+        <h1 class="mb-4">Évaluez votre <span>risque de diabète</span> en moins de 2 minutes</h1>
+        <p class="lead mb-4">
+          DiaCheck est un outil de dépistage qui estime votre risque de diabète à partir de quelques
+          données de santé simples, grâce à un modèle d'intelligence artificielle entraîné sur des
+          données cliniques réelles.
+        </p>
+        <div class="d-flex flex-wrap gap-3 tw-mb-2">
+          <a href="#depistage" class="btn btn-dia-primaire btn-lg">
+            <i class="bi bi-clipboard2-pulse me-1"></i> Commencer le test
+          </a>
+          <a href="#comment-ca-marche" class="btn btn-dia-outline btn-lg">Comment ça marche</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-visuel">
+          <div class="moniteur-cardiaque">
+            <div class="moniteur-entete">
+              <span class="pastille-direct">En direct</span>
+              <span class="bpm" id="bpm-hero">72<small>bpm</small></span>
+            </div>
+            <div class="moniteur-ecran">
+              <div class="ecg-scroller">
+                <div class="ecg-track">
+                  <svg class="ecg-trace" viewBox="0 0 300 130" preserveAspectRatio="none">
+                    <polyline points="0,65 40,65 55,50 70,65 100,65 115,65 125,100 135,10 145,120 155,65 175,65 195,65 210,45 225,65 260,65 300,65" />
+                  </svg>
+                  <svg class="ecg-trace" viewBox="0 0 300 130" preserveAspectRatio="none">
+                    <polyline points="0,65 40,65 55,50 70,65 100,65 115,65 125,100 135,10 145,120 155,65 175,65 195,65 210,45 225,65 260,65 300,65" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-stat-flottante tw-top-2 tw-left-0" style="top: 6%; left: -4%;">
+            <i class="bi bi-check-circle-fill text-success me-1"></i> Résultat instantané
+          </div>
+          <div class="hero-stat-flottante" style="bottom: 4%; right: -4%;">
+            <i class="bi bi-lock-fill text-primaire me-1" style="color: var(--couleur-primaire);"></i> Données non sauvegardées
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== POURQUOI CE TEST ===================== -->
+<section id="pourquoi">
+  <div class="container">
+    <div class="text-center mx-auto mb-5 reveal" style="max-width: 620px;">
+      <p class="eyebrow">Pourquoi ce dépistage</p>
+      <h2 class="section-titre">Un premier pas simple vers la prévention</h2>
+      <p class="section-sous-titre mx-auto">
+        Le diabète de type 2 évolue souvent sans symptômes visibles pendant plusieurs années.
+        Un dépistage précoce permet d'agir avant l'apparition de complications.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 reveal">
+        <div class="carte-feature">
+          <div class="icone-wrap"><i class="bi bi-stopwatch"></i></div>
+          <h5>Rapide</h5>
+          <p class="text-body-secondary mb-0">Un formulaire de 8 champs, un résultat obtenu en quelques secondes.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="carte-feature">
+          <div class="icone-wrap"><i class="bi bi-cpu"></i></div>
+          <h5>Basé sur l'IA</h5>
+          <p class="text-body-secondary mb-0">Un modèle de régression logistique entraîné sur des données cliniques réelles.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="carte-feature">
+          <div class="icone-wrap"><i class="bi bi-incognito"></i></div>
+          <h5>Confidentiel</h5>
+          <p class="text-body-secondary mb-0">Ce prototype ne sauvegarde aucune donnée : tout reste dans ton navigateur.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMMENT ÇA MARCHE ===================== -->
+<section id="comment-ca-marche" class="bg-white">
+  <div class="container">
+    <div class="text-center mx-auto mb-5 reveal" style="max-width: 620px;">
+      <p class="eyebrow">Le processus</p>
+      <h2 class="section-titre">Comment ça marche</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 etape reveal">
+        <div class="numero">1</div>
+        <h5>Renseignez vos données</h5>
+        <p class="text-body-secondary">Âge, glycémie, tension, IMC... uniquement les informations nécessaires au calcul.</p>
+      </div>
+      <div class="col-md-4 etape reveal">
+        <div class="numero">2</div>
+        <h5>L'IA calcule votre risque</h5>
+        <p class="text-body-secondary">Le modèle estime une probabilité de diabète, exprimée en pourcentage.</p>
+      </div>
+      <div class="col-md-4 etape reveal">
+        <div class="numero">3</div>
+        <h5>Recevez une recommandation</h5>
+        <p class="text-body-secondary">Selon votre niveau de risque, une recommandation de suivi vous est proposée.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORMULAIRE DE DÉPISTAGE ===================== -->
+<section id="depistage">
+  <div class="container">
+    <div class="text-center mx-auto mb-5 reveal" style="max-width: 620px;">
+      <p class="eyebrow">Dépistage</p>
+      <h2 class="section-titre">Faites le test maintenant</h2>
+      <p class="section-sous-titre mx-auto">
+        Les champs marqués « optionnel » peuvent être laissés vides si tu ne connais pas la valeur.
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+
+        <div class="carte-formulaire reveal">
+          <div class="entete-form">
+            <h4 class="mb-1 text-white"><i class="bi bi-clipboard2-pulse me-2"></i>Formulaire de dépistage</h4>
+            <p class="mb-0 tw-opacity-90">Renseigne tes données de santé ci-dessous</p>
+          </div>
+
+          <div class="corps-form">
+            <form id="formulaire-depistage" class="row g-4">
+              <div class="col-md-6 champ">
+                <label for="age">Âge (années)</label>
+                <input type="number" class="form-control" id="age" min="0" max="120" required>
+              </div>
+              <div class="col-md-6 champ">
+                <label for="grossesses">Nombre de grossesses</label>
+                <input type="number" class="form-control" id="grossesses" min="0" value="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="glycemie">Glycémie <span class="optionnel">(mg/dL)</span></label>
+                <input type="number" class="form-control" id="glycemie" step="0.1" min="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="tension_systolique">Tension systolique <span class="optionnel">(mm Hg)</span></label>
+                <input type="number" class="form-control" id="tension_systolique" step="0.1" min="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="epaisseur_peau">Épaisseur du pli cutané <span class="optionnel">(mm)</span></label>
+                <input type="number" class="form-control" id="epaisseur_peau" step="0.1" min="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="insuline">Insuline sérique <span class="optionnel">(mu U/mL)</span></label>
+                <input type="number" class="form-control" id="insuline" step="0.1" min="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="imc">IMC <span class="optionnel">(kg/m²)</span></label>
+                <input type="number" class="form-control" id="imc" step="0.1" min="0">
+              </div>
+              <div class="col-md-6 champ">
+                <label for="antecedents_familiaux">Antécédents familiaux <span class="optionnel">(0 = aucun)</span></label>
+                <input type="number" class="form-control" id="antecedents_familiaux" step="0.01" min="0" value="0.2">
+              </div>
+
+              <div class="col-12 col-sm-8 mt-2">
+                <button type="submit" id="bouton-soumettre" class="btn btn-dia-primaire btn-lg w-100">
+                  <i class="bi bi-search-heart me-1"></i> Évaluer mon risque
+                </button>
+              </div>
+              <div class="col-12 col-sm-4 mt-2">
+                <button type="button" id="bouton-reinitialiser" class="btn btn-dia-outline btn-lg w-100">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="bandeau-avertissement mt-4 reveal">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div>
+            <strong>Avertissement médical.</strong> DiaCheck est un prototype à visée éducative.
+            Il ne pose pas de diagnostic et ne remplace en aucun cas l'avis d'un professionnel de santé.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONSEILS SANTÉ ===================== -->
+<section id="conseils" class="bg-white">
+  <div class="container">
+    <div class="text-center mx-auto mb-5 reveal" style="max-width: 620px;">
+      <p class="eyebrow">Conseils santé</p>
+      <h2 class="section-titre">Que tu sois diabétique ou non</h2>
+      <p class="section-sous-titre mx-auto">
+        Quelques recommandations générales, à adapter avec ton médecin selon ta situation.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6 reveal">
+        <div class="carte-conseil prevention">
+          <div class="entete-conseil">
+            <div class="icone-conseil"><i class="bi bi-shield-check"></i></div>
+            <div>
+              <h5 class="mb-0">Tu n'es pas diabétique ?</h5>
+              <p class="text-body-secondary mb-0 small">Garde le cap sur la prévention</p>
+            </div>
+          </div>
+          <ul>
+            <li><i class="bi bi-check-circle-fill"></i><span>Adopte une alimentation équilibrée : légumes, fibres, céréales complètes, en limitant sucres raffinés et boissons sucrées.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Bouge au moins 30 minutes par jour, 5 jours par semaine (marche rapide, vélo, natation...).</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Surveille ton poids : viser un IMC entre 18,5 et 25 réduit fortement le risque de diabète de type 2.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Fais un contrôle de la glycémie tous les 3 ans à partir de 45 ans, ou plus tôt en cas d'antécédents familiaux.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Limite l'alcool et évite le tabac, deux facteurs de risque bien documentés.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Dors suffisamment et gère ton stress : les deux influencent directement la régulation de la glycémie.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-6 reveal">
+        <div class="carte-conseil gestion">
+          <div class="entete-conseil">
+            <div class="icone-conseil"><i class="bi bi-heart-pulse-fill"></i></div>
+            <div>
+              <h5 class="mb-0">Risque élevé ou diabète diagnostiqué ?</h5>
+              <p class="text-body-secondary mb-0 small">Ce qu'il est utile de mettre en place</p>
+            </div>
+          </div>
+          <ul>
+            <li><i class="bi bi-check-circle-fill"></i><span>Consulte un médecin rapidement pour confirmer le diagnostic (glycémie à jeun, test HbA1c).</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Si un traitement t'est prescrit, suis-le scrupuleusement et ne l'arrête jamais sans avis médical.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Adapte ton alimentation avec l'aide d'un professionnel : réduis sucres et féculents raffinés, privilégie fibres et protéines maigres.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Surveille régulièrement ta glycémie si ton médecin te le recommande, et note les résultats.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Fais suivre aussi ta tension artérielle et ton cholestérol : ce sont des complications fréquentes du diabète.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Reste attentif aux signes d'alerte : soif excessive, fatigue inhabituelle, vision floue, plaies qui cicatrisent mal.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq" class="bg-white">
+  <div class="container">
+    <div class="text-center mx-auto mb-5 reveal" style="max-width: 620px;">
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2 class="section-titre">FAQ</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 reveal">
+        <div class="accordion" id="accordionFaq">
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Ce test remplace-t-il un avis médical ?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+              <div class="accordion-body">
+                Non. DiaCheck est un outil d'orientation qui estime une probabilité statistique de diabète.
+                Seul un professionnel de santé peut poser un diagnostic, à l'aide d'examens complémentaires.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                Mes données sont-elles sauvegardées quelque part ?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+              <div class="accordion-body">
+                Non, pas dans ce prototype. Les données saisies sont envoyées à l'API uniquement pour le
+                calcul, puis ne sont pas conservées.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Comment le risque est-il calculé ?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+              <div class="accordion-body">
+                Un modèle de régression logistique, entraîné sur un jeu de données cliniques réelles,
+                estime la probabilité de diabète à partir des informations que tu fournis.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                Que faire si mon résultat indique un risque élevé ?
+              </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+              <div class="accordion-body">
+                Prends rendez-vous avec un professionnel de santé dès que possible pour un bilan
+                complémentaire. Un risque élevé n'est pas un diagnostic, mais un signal à prendre au sérieux.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer-dia">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <h5 class="d-flex align-items-center gap-2 mb-3"><i class="bi bi-activity"></i> DiaCheck</h5>
+        <p class="mb-2">
+          Prototype de dépistage du risque de diabète, développé à visée éducative.
+        </p>
+        <p class="mb-0">
+          <i class="bi bi-envelope-fill me-2"></i><a href="mailto:feyoumonamerveille@gmail.com">feyoumonamerveille@gmail.com</a>
+        </p>
+      </div>
+      <div class="col-lg-4">
+        <h5 class="mb-3">Navigation</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="#accueil">Accueil</a></li>
+          <li><a href="#comment-ca-marche">Comment ça marche</a></li>
+          <li><a href="#depistage">Faire le test</a></li>
+          <li><a href="#conseils">Conseils santé</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5 class="mb-3">Avertissement</h5>
+        <p class="mb-0">
+          Cet outil ne remplace pas un avis médical professionnel. En cas de doute sur ta santé,
+          consulte un médecin.
+        </p>
+      </div>
+    </div>
+    <hr class="my-4">
+    <p class="text-center mb-0 small">© 2026 DiaCheck — Prototype éducatif.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS (navbar, accordion) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 (popup animée pour le résultat du dépistage) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Logique du site (appel AJAX vers l'API + animations) -->
+<script src="assets/js/main.js?v=20260918d"></script>
+</body>
+</html>

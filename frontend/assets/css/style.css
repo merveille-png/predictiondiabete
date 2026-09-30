@@ -1,0 +1,517 @@
+/* ==========================================================================
+   DiaCheck — feuille de style principale
+   Palette et mise en page inspirées des thèmes médicaux (type MediLab),
+   construites ici en Bootstrap 5 (structure/composants) + utilitaires
+   Tailwind préfixés "tw-" (voir index.html) pour les finitions.
+   ========================================================================== */
+
+:root {
+  --couleur-primaire: #e11d48;
+  --couleur-primaire-claire: #fb7185;
+  --couleur-primaire-sombre: #9f1239;
+  --couleur-accent: #f59e0b;
+  --couleur-texte: #1f2a2e;
+  --couleur-texte-doux: #5b6b70;
+  --couleur-fond: #fdf7f7;
+  --couleur-carte: #ffffff;
+  --couleur-bordure: #f0dfe2;
+  --risque-faible: #16a34a;
+  --risque-modere: #d97706;
+  --risque-eleve: #dc2626;
+  --ombre-douce: 0 10px 30px rgba(225, 29, 72, 0.1);
+  --rayon: 16px;
+}
+
+* { scroll-behavior: smooth; }
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--couleur-texte);
+  background: var(--couleur-fond);
+}
+
+h1, h2, h3, h4, .font-titre {
+  font-family: "Poppins", "Inter", sans-serif;
+  font-weight: 600;
+}
+
+a { text-decoration: none; }
+
+/* ---------- Navbar ---------- */
+.navbar-dia {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 16px rgba(225, 29, 72, 0.08);
+}
+
+.navbar-dia .navbar-brand {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  color: var(--couleur-primaire-sombre);
+}
+
+.navbar-dia .navbar-brand i { color: var(--couleur-primaire); }
+
+.navbar-dia .nav-link {
+  color: var(--couleur-texte);
+  font-weight: 500;
+  margin: 0 4px;
+}
+
+.navbar-dia .nav-link:hover,
+.navbar-dia .nav-link.active {
+  color: var(--couleur-primaire);
+}
+
+.btn-dia-primaire {
+  background: var(--couleur-primaire);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 999px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn-dia-primaire:hover {
+  background: var(--couleur-primaire-sombre);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-dia-outline {
+  border: 1.5px solid var(--couleur-primaire);
+  color: var(--couleur-primaire);
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: transparent;
+  transition: all 0.15s ease;
+}
+
+.btn-dia-outline:hover {
+  background: var(--couleur-primaire);
+  color: #fff;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  padding: 160px 0 100px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(251, 113, 133, 0.22), transparent 45%),
+    linear-gradient(160deg, #fdf7f7 0%, #fbe9ec 60%, #fdf7f7 100%);
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fde8ec;
+  color: var(--couleur-primaire-sombre);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  color: var(--couleur-texte);
+}
+
+.hero h1 span { color: var(--couleur-primaire); }
+
+.hero p.lead {
+  color: var(--couleur-texte-doux);
+  font-size: 1.1rem;
+  max-width: 520px;
+}
+
+.hero-visuel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Moniteur cardiaque (visuel du hero) ---------- */
+.moniteur-cardiaque {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #0b1220;
+  border-radius: 20px;
+  padding: 18px 20px 20px;
+  box-shadow: 0 24px 60px rgba(11, 18, 32, 0.35);
+  border: 1px solid #1e293b;
+}
+
+.moniteur-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #7dd3fc;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pastille-direct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pastille-direct::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f87171;
+  animation: pastille-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pastille-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+
+.moniteur-entete .bpm {
+  color: #4ade80;
+  font-family: "Poppins", monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+}
+
+.moniteur-entete .bpm small {
+  color: #7dd3fc;
+  font-weight: 500;
+  font-size: 0.65rem;
+  margin-left: 3px;
+  text-transform: lowercase;
+}
+
+.moniteur-ecran {
+  position: relative;
+  height: 140px;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(74, 222, 128, 0.09) 0, rgba(74, 222, 128, 0.09) 1px, transparent 1px, transparent 24px),
+    repeating-linear-gradient(90deg, rgba(74, 222, 128, 0.09) 0, rgba(74, 222, 128, 0.09) 1px, transparent 1px, transparent 24px),
+    #071019;
+}
+
+/* ---------- Trace ECG réutilisable (hero + popups SweetAlert) ---------- */
+.ecg-scroller {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.ecg-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: ecg-defilement 2.4s linear infinite;
+}
+
+.ecg-trace {
+  width: 300px;
+  height: 100%;
+  flex-shrink: 0;
+  overflow: visible;
+  display: block;
+}
+
+.ecg-trace polyline {
+  fill: none;
+  stroke: #4ade80;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.7));
+}
+
+@keyframes ecg-defilement {
+  from { transform: translateX(0); }
+  to { transform: translateX(-300px); }
+}
+
+/* Variantes couleur/vitesse selon le niveau de risque (popup résultat) */
+.ecg-track.risque-faible polyline { stroke: #4ade80; filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.7)); }
+.ecg-track.risque-modere polyline { stroke: #fbbf24; filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.7)); }
+.ecg-track.risque-eleve polyline { stroke: #f87171; filter: drop-shadow(0 0 6px rgba(248, 113, 113, 0.7)); }
+
+.ecg-track.risque-modere { animation-duration: 1.6s; }
+.ecg-track.risque-eleve { animation-duration: 1s; }
+
+.ecg-mini-ecran {
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background:
+    repeating-linear-gradient(90deg, rgba(74, 222, 128, 0.09) 0, rgba(74, 222, 128, 0.09) 1px, transparent 1px, transparent 20px),
+    #071019;
+}
+
+.hero-stat-flottante {
+  position: absolute;
+  background: var(--couleur-carte);
+  border-radius: 14px;
+  box-shadow: var(--ombre-douce);
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- Sections génériques ---------- */
+section { padding: 88px 0; }
+
+.eyebrow {
+  color: var(--couleur-primaire);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.section-titre { color: var(--couleur-texte); margin-bottom: 12px; }
+.section-sous-titre { color: var(--couleur-texte-doux); max-width: 620px; }
+
+/* ---------- Cartes fonctionnalités ---------- */
+.carte-feature {
+  background: var(--couleur-carte);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  padding: 32px 26px;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carte-feature:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--ombre-douce);
+}
+
+.carte-feature .icone-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #fde8ec;
+  color: var(--couleur-primaire);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+}
+
+/* ---------- Étapes "Comment ça marche" ---------- */
+.etape {
+  text-align: center;
+  padding: 0 12px;
+}
+
+.etape .numero {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--couleur-primaire);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+/* ---------- Formulaire de dépistage ---------- */
+.carte-formulaire {
+  background: var(--couleur-carte);
+  border-radius: 20px;
+  box-shadow: var(--ombre-douce);
+  border: 1px solid var(--couleur-bordure);
+  overflow: hidden;
+}
+
+.carte-formulaire .entete-form {
+  background: linear-gradient(135deg, var(--couleur-primaire), var(--couleur-primaire-claire));
+  color: #fff;
+  padding: 28px 32px;
+}
+
+.carte-formulaire .corps-form { padding: 32px; }
+
+.champ label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--couleur-texte);
+  margin-bottom: 6px;
+}
+
+.champ label .optionnel {
+  font-weight: 400;
+  color: var(--couleur-texte-doux);
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid var(--couleur-bordure);
+  padding: 10px 14px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--couleur-primaire-claire);
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
+}
+
+/* ---------- Résultat (affiché dans la popup SweetAlert2, voir main.js) ---------- */
+.jauge-risque {
+  height: 10px;
+  border-radius: 999px;
+  background: #f2e5e7;
+  overflow: hidden;
+  margin: 14px 0;
+}
+
+.jauge-risque .remplissage {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.alert-recommandation {
+  background: #fde8ec;
+  color: var(--couleur-primaire-sombre);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.swal2-popup .swal2-footer a {
+  color: var(--couleur-primaire);
+  font-weight: 600;
+}
+
+/* ---------- Conseils santé ---------- */
+.carte-conseil {
+  background: var(--couleur-carte);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  padding: 32px;
+  height: 100%;
+}
+
+.carte-conseil .entete-conseil {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.carte-conseil .icone-conseil {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.carte-conseil.prevention .icone-conseil { background: var(--couleur-primaire); }
+.carte-conseil.gestion .icone-conseil { background: var(--risque-eleve); }
+
+.carte-conseil ul { list-style: none; padding: 0; margin: 0; }
+
+.carte-conseil ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.carte-conseil ul li:last-child { margin-bottom: 0; }
+
+.carte-conseil ul li i { flex-shrink: 0; margin-top: 3px; }
+
+.carte-conseil.prevention ul li i { color: var(--couleur-primaire); }
+.carte-conseil.gestion ul li i { color: var(--risque-eleve); }
+
+/* ---------- FAQ ---------- */
+.accordion-item {
+  border: 1px solid var(--couleur-bordure);
+  border-radius: 12px !important;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.accordion-button {
+  font-weight: 600;
+  color: var(--couleur-texte);
+}
+
+.accordion-button:not(.collapsed) {
+  background: #fde8ec;
+  color: var(--couleur-primaire-sombre);
+  box-shadow: none;
+}
+
+.accordion-button:focus { box-shadow: none; }
+
+/* ---------- Avertissement médical ---------- */
+.bandeau-avertissement {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 14px;
+  padding: 18px 22px;
+  color: #92400e;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.bandeau-avertissement i { font-size: 1.3rem; flex-shrink: 0; }
+
+/* ---------- Footer ---------- */
+.footer-dia {
+  background: #1a0a0d;
+  color: #d9c9cc;
+  padding: 64px 0 28px;
+}
+
+.footer-dia h5 { color: #fff; font-family: "Poppins", sans-serif; }
+.footer-dia a { color: #baa1a5; }
+.footer-dia a:hover { color: var(--couleur-primaire-claire); }
+.footer-dia hr { border-color: #331419; }
+
+/* ---------- Reveal au scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 767px) {
+  .hero { padding: 120px 0 70px; text-align: center; }
+  .hero p.lead { margin-left: auto; margin-right: auto; }
+  .hero-visuel { margin-top: 40px; }
+  section { padding: 60px 0; }
+}

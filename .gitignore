@@ -1,0 +1,14 @@
+# Environnement virtuel Python
+backend/venv/
+__pycache__/
+*.pyc
+
+# Secrets (générés par generer_identifiants.py, jamais commités)
+backend/.env
+
+# Logs / fichiers temporaires
+backend/*.log
+
+# OS
+.DS_Store
+Thumbs.db
